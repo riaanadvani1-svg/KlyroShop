@@ -3,40 +3,31 @@
 <head>
 <title>KLYRO Checkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
 <style>
-body{background:#0b0b0b;color:white;font-family:Arial;text-align:center}
-.box{max-width:400px;margin:auto;background:#111;padding:20px;border-radius:12px;margin-top:50px}
-button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold;cursor:pointer}
-input{padding:8px;width:90%;margin-bottom:10px}
+body{background:#0b0b0b;color:white;font-family:Arial;text-align:center;}
+.box{max-width:400px;margin:auto;background:#111;padding:20px;border-radius:12px;margin-top:50px;}
+button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold;cursor:pointer;}
+input{padding:8px;width:90%;margin-bottom:10px;}
 </style>
 </head>
-
 <body>
 
 <h1>Checkout</h1>
-
 <div class="box">
-
 <div id="items"></div>
 <br>
 <b>Total: $<span id="total">0</span></b>
 <br><br>
-
 <input id="email" placeholder="Receipt Email">
 <br>
-
 <button onclick="buy()">Confirm Purchase</button>
-
 </div>
 
 <script>
-/* 🔴 CONFIGURE THESE */
-emailjs.init("PASTE_YOUR_PUBLIC_KEY"); // your EmailJS public key
-const SERVICE_ID = "PASTE_YOUR_SERVICE_ID"; // EmailJS service ID
+/* 🔴 EMAILJS CONFIG */
+emailjs.init("PASTE_PUBLIC_KEY"); // your EmailJS public key
+const SERVICE_ID = "PASTE_SERVICE_ID"; // your EmailJS service ID
 const TEMPLATE_ID = "template_7hoecnn"; // your template ID
 
 /* CART LOGIC */
@@ -46,22 +37,26 @@ const prices = {
  "Creator Bundle":10
 };
 
-const cart = JSON.parse(localStorage.getItem("cart")||"[]");
+const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 let sum = 0;
-items.innerHTML = cart.map(i=>{
- sum += prices[i];
- return i + " - $" + prices[i];
-}).join("<br>");
+if(cart.length === 0){
+  items.innerHTML = "Cart is empty!";
+} else {
+  items.innerHTML = cart.map(i=>{
+    sum += prices[i];
+    return i + " - $" + prices[i];
+  }).join("<br>");
+}
 
 total.innerText = sum;
 
-/* BUY FUNCTION */
 function buy(){
  const userEmail = document.getElementById("email").value;
- if(!userEmail) return alert("Enter your email!");
+ if(!userEmail) return alert("Enter email!");
+ if(cart.length === 0) return alert("Cart empty!");
 
- // send email using EmailJS
+ // Send email using EmailJS
  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
    to_email: userEmail,
    items: cart.join(", "),
@@ -69,7 +64,7 @@ function buy(){
  }).then(()=>{
    alert("Purchase complete! Receipt sent to " + userEmail);
    localStorage.removeItem("cart"); // clear cart
-   location.href="index.html"; // go home
+   window.location.href = "index.html"; // back to store
  }).catch(err=>{
    console.error(err);
    alert("Error sending email. Try again.");
