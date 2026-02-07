@@ -4,13 +4,14 @@
 <title>KLYRO Checkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
 body{background:#0b0b0b;color:white;font-family:Arial;text-align:center}
-.box{max-width:400px;margin:auto;background:#111;padding:20px;border-radius:12px}
-button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold}
-input{padding:8px;width:90%}
+.box{max-width:400px;margin:auto;background:#111;padding:20px;border-radius:12px;margin-top:50px}
+button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold;cursor:pointer}
+input{padding:8px;width:90%;margin-bottom:10px}
 </style>
 </head>
 
@@ -23,57 +24,57 @@ input{padding:8px;width:90%}
 <div id="items"></div>
 <br>
 <b>Total: $<span id="total">0</span></b>
-
 <br><br>
 
 <input id="email" placeholder="Receipt Email">
-
-<br><br>
+<br>
 
 <button onclick="buy()">Confirm Purchase</button>
 
 </div>
 
 <script>
+/* 🔴 CONFIGURE THESE */
+emailjs.init("PASTE_YOUR_PUBLIC_KEY"); // your EmailJS public key
+const SERVICE_ID = "PASTE_YOUR_SERVICE_ID"; // EmailJS service ID
+const TEMPLATE_ID = "template_7hoecnn"; // your template ID
 
-// 🔴 PUT YOUR EMAILJS PUBLIC KEY HERE
-emailjs.init("PASTE_PUBLIC_KEY");
-
-// Prices
-const prices={
+/* CART LOGIC */
+const prices = {
  "PFP Pack":5,
  "Wallpaper":3,
  "Creator Bundle":10
 };
 
-// Load cart
-const cart=JSON.parse(localStorage.getItem("cart")||"[]");
+const cart = JSON.parse(localStorage.getItem("cart")||"[]");
 
-let sum=0;
-
-items.innerHTML=cart.map(i=>{
- sum+=prices[i];
- return i+" - $"+prices[i];
+let sum = 0;
+items.innerHTML = cart.map(i=>{
+ sum += prices[i];
+ return i + " - $" + prices[i];
 }).join("<br>");
 
-total.innerText=sum;
+total.innerText = sum;
 
+/* BUY FUNCTION */
 function buy(){
+ const userEmail = document.getElementById("email").value;
+ if(!userEmail) return alert("Enter your email!");
 
- if(!email.value) return alert("Enter email");
-
- emailjs.send("PASTE_SERVICE_ID","template_7hoecnn",{
-   to_email: email.value,
+ // send email using EmailJS
+ emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+   to_email: userEmail,
    items: cart.join(", "),
    total: sum
+ }).then(()=>{
+   alert("Purchase complete! Receipt sent to " + userEmail);
+   localStorage.removeItem("cart"); // clear cart
+   location.href="index.html"; // go home
+ }).catch(err=>{
+   console.error(err);
+   alert("Error sending email. Try again.");
  });
-
- alert("Purchase complete! Receipt sent.");
-
- localStorage.removeItem("cart");
- location.href="index.html";
 }
-
 </script>
 
 </body>
