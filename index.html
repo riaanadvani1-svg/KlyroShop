@@ -2,171 +2,138 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>KLYRO Store</title>
+<title>KLYRO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-/* --- GENERAL --- */
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background: #0b0b0b;
-  color: white;
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b0b0b;
+color:white;
 }
 
-/* --- TOPBAR --- */
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background: #111;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-}
-nav h2 {
-  margin: 0;
-  font-size: 24px;
-}
-nav .cart {
-  background: #fff;
-  color: #111;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-nav .cart:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+/* TOP BAR */
+nav{
+position:sticky;
+top:0;
+z-index:10;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+background:#111;
+box-shadow:0 5px 20px #000;
 }
 
-/* --- PRODUCT GRID --- */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  padding: 30px;
+nav img{height:40px}
+
+.cart{
+background:white;
+color:black;
+padding:8px 18px;
+border-radius:25px;
+cursor:pointer;
+transition:.25s;
 }
 
-/* --- PRODUCT CARD --- */
-.card {
-  background: #111;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 0 8px #000;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(255,255,255,0.2);
-}
-.card img {
-  width: 100%;
-  border-radius: 10px;
-  transition: transform 0.3s;
-}
-.card img:hover {
-  transform: scale(1.05);
+.cart:hover{
+transform:scale(1.1);
+box-shadow:0 0 10px white;
 }
 
-/* --- BUTTONS --- */
-button {
-  margin-top: 12px;
-  padding: 10px 22px;
-  border: none;
-  border-radius: 25px;
-  background: #fff;
-  color: #111;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s, transform 0.2s;
-}
-button:hover {
-  background: #ff5e5e;
-  color: white;
-  transform: scale(1.05);
+/* PRODUCTS GRID */
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+padding:40px;
 }
 
-/* --- CHECKOUT BUTTON --- */
-.checkout-btn {
-  display: inline-block;
-  margin: 30px auto;
-  font-size: 18px;
+/* PRODUCT CARD */
+.card{
+background:#111;
+border-radius:18px;
+padding:15px;
+text-align:center;
+box-shadow:0 0 15px #000;
+transition:.3s;
+overflow:hidden;
 }
 
-/* --- FOOTER --- */
-footer {
-  text-align: center;
-  padding: 20px;
-  opacity: 0.6;
+.card:hover{
+transform:translateY(-10px) scale(1.02);
+box-shadow:0 0 25px rgba(255,255,255,.2);
+}
+
+.card img{
+width:100%;
+border-radius:12px;
+transition:.4s;
+}
+
+.card:hover img{
+transform:scale(1.1);
+}
+
+.card h3{margin:12px 0 5px}
+.card p{opacity:.7}
+
+/* BUTTON */
+button{
+margin-top:10px;
+padding:10px 22px;
+border:none;
+border-radius:25px;
+font-weight:bold;
+cursor:pointer;
+background:white;
+transition:.25s;
+}
+
+button:hover{
+background:#ff4444;
+color:white;
+transform:scale(1.1);
 }
 </style>
 </head>
+
 <body>
 
-<!-- TOPBAR -->
 <nav>
-  <h2>KLYRO Store</h2>
-  <div class="cart" onclick="checkout()">🛒 Cart: <span id="count">0</span></div>
+<img src="IMG_5093.png">
+<div class="cart" onclick="checkout()">🛒 <span id="count">0</span></div>
 </nav>
 
-<!-- PRODUCTS -->
-<section class="products">
-  <div class="card">
-    <img src="https://picsum.photos/300?1" alt="PFP Pack">
-    <h3>PFP Pack</h3>
-    <p>$5</p>
-    <button onclick="addToCart('PFP Pack')">Add to Cart</button>
-  </div>
+<div class="products">
 
-  <div class="card">
-    <img src="https://picsum.photos/300?2" alt="Wallpaper">
-    <h3>Wallpaper</h3>
-    <p>$3</p>
-    <button onclick="addToCart('Wallpaper')">Add to Cart</button>
-  </div>
-
-  <div class="card">
-    <img src="https://picsum.photos/300?3" alt="Creator Bundle">
-    <h3>Creator Bundle</h3>
-    <p>$10</p>
-    <button onclick="addToCart('Creator Bundle')">Add to Cart</button>
-  </div>
-</section>
-
-<!-- CHECKOUT BUTTON -->
-<div style="text-align:center;">
-  <button class="checkout-btn" onclick="checkout()">Go to Checkout</button>
+<div class="card">
+<img src="https://picsum.photos/300?1">
+<h3>PFP Pack</h3>
+<p>$5</p>
+<button onclick="add('PFP Pack')">Add to Cart</button>
 </div>
 
-<footer>
-© 2026 KLYRO
-</footer>
+<div class="card">
+<img src="https://picsum.photos/300?2">
+<h3>Wallpaper</h3>
+<p>$3</p>
+<button onclick="add('Wallpaper')">Add to Cart</button>
+</div>
 
-<script>
-/* --- CART SCRIPT --- */
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+<div class="card">
+<img src="https://picsum.photos/300?3">
+<h3>Creator Bundle</h3>
+<p>$10</p>
+<button onclick="add('Creator Bundle')">Add to Cart</button>
+</div>
 
-// Update topbar cart count
-document.getElementById("count").innerText = cart.length;
+</div>
 
-// Add item to cart
-function addToCart(item){
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  document.getElementById("count").innerText = cart.length;
-  alert(item + " added to cart!");
-}
-
-// Go to checkout
-function checkout(){
-  if(cart.length === 0){
-    alert("Cart is empty!");
-    return;
-  }
-  window.location.href = "checkout.html";
-}
-</script>
+<script src="main.js"></script>
 
 </body>
 </html>
