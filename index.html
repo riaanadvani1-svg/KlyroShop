@@ -87,6 +87,13 @@ button:hover {
   transform: scale(1.05);
 }
 
+/* --- CHECKOUT BUTTON --- */
+.checkout-btn {
+  display: inline-block;
+  margin: 30px auto;
+  font-size: 18px;
+}
+
 /* --- FOOTER --- */
 footer {
   text-align: center;
@@ -127,6 +134,11 @@ footer {
   </div>
 </section>
 
+<!-- CHECKOUT BUTTON -->
+<div style="text-align:center;">
+  <button class="checkout-btn" onclick="checkout()">Go to Checkout</button>
+</div>
+
 <footer>
 © 2026 KLYRO
 </footer>
@@ -134,8 +146,11 @@ footer {
 <script>
 /* --- CART SCRIPT --- */
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+// Update topbar cart count
 document.getElementById("count").innerText = cart.length;
 
+// Add item to cart
 function addToCart(item){
   cart.push(item);
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -143,6 +158,7 @@ function addToCart(item){
   alert(item + " added to cart!");
 }
 
+// Go to checkout
 function checkout(){
   if(cart.length === 0){
     alert("Cart is empty!");
