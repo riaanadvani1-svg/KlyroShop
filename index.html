@@ -1,123 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>KLYRO Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-/* Styles same as before */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Montserrat',sans-serif;background:#0b0b0b;color:#fff;}
-nav{width:100%;background:#111;display:flex;justify-content:space-between;align-items:center;padding:10px 30px;position:sticky;top:0;z-index:100;box-shadow:0 2px 5px #000;}
-nav .logo{display:flex;align-items:center;}
-nav .logo img{width:50px;margin-right:10px;}
-nav .nav-links a{color:white;text-decoration:none;margin-left:20px;font-weight:bold;transition:color 0.2s;}
-nav .nav-links a:hover{color:#1e90ff;}
-nav #loginBtn{padding:5px 10px;border:none;border-radius:10px;background:#1e90ff;color:white;cursor:pointer;}
-nav #loginBtn:hover{background:#0d66c1;}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:30px;margin-top:20px;}
-.card{background:#111;border-radius:12px;padding:15px;text-align:center;box-shadow:0 0 15px #000;transition:transform 0.2s,box-shadow 0.2s;}
-.card:hover{transform:translateY(-5px);box-shadow:0 0 20px #1e90ff;}
-.card img{width:100%;border-radius:10px;margin-bottom:10px;}
-.card h3{margin-bottom:5px;}
-.card p{margin-bottom:10px;font-weight:bold;color:#1e90ff;}
-button{padding:10px 20px;border:none;border-radius:25px;background:#1e90ff;color:#fff;font-weight:bold;cursor:pointer;transition:background 0.2s;margin:5px;}
-button:hover{background:#0d66c1;}
-.cart{position:fixed;top:15px;right:15px;background:#fff;color:#000;padding:10px 18px;border-radius:20px;font-weight:bold;cursor:pointer;transition:transform 0.2s;}
-.cart.bump{transform:scale(1.2);}
-footer{text-align:center;opacity:.5;padding:20px;margin-top:30px;}
+body{margin:0;background:#0b0b0b;color:white;font-family:Arial}
+nav{display:flex;gap:10px;padding:10px;background:#111;align-items:center}
+input{padding:6px;border-radius:6px;border:none}
+button{padding:6px 12px;border:none;border-radius:10px;cursor:pointer}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:20px}
+.card{background:#111;padding:10px;border-radius:10px;text-align:center}
+.cart{position:fixed;top:10px;right:10px;background:white;color:black;padding:8px 14px;border-radius:20px}
 </style>
 </head>
+
 <body>
 
+<div class="cart">🛒 <span id="count">0</span></div>
+
 <nav>
-  <div class="logo"><img src="IMG_5093.png" alt="KLYRO Logo"><span>KLYRO Store</span></div>
-  <div class="nav-links">
-    <a href="#products">Products</a>
-    <a href="checkout.html">Checkout</a>
-    <button id="loginBtn">Sign in with Google</button>
-    <span id="userName"></span>
-  </div>
+<input id="email" placeholder="email">
+<input id="password" type="password" placeholder="password">
+<button onclick="signup()">Sign Up</button>
+<button onclick="login()">Login</button>
+<span id="user"></span>
+<button onclick="checkout()">Checkout</button>
 </nav>
 
-<div class="cart">Cart: <span id="count">0</span></div>
+<section class="products">
 
-<header style="text-align:center;padding:20px;">
-  <h1>KLYRO</h1>
-  <div class="slogan">If you want to quit, remember why you started.</div>
-</header>
+<div class="card">
+<h3>PFP Pack</h3>
+<p>$5</p>
+<button onclick="add('PFP Pack')">Add</button>
+</div>
 
-<section id="products" class="products">
-  <div class="card" data-price="5">
-    <img src="https://picsum.photos/300?1" alt="Profile Picture Pack">
-    <h3>Profile Picture Pack</h3>
-    <p>$5</p>
-    <button onclick="add(this)">Add to Cart</button>
-  </div>
+<div class="card">
+<h3>Wallpaper</h3>
+<p>$3</p>
+<button onclick="add('Wallpaper')">Add</button>
+</div>
 
-  <div class="card" data-price="3">
-    <img src="https://picsum.photos/300?2" alt="Motivation Wallpaper">
-    <h3>Motivation Wallpaper</h3>
-    <p>$3</p>
-    <button onclick="add(this)">Add to Cart</button>
-  </div>
+<div class="card">
+<h3>Creator Bundle</h3>
+<p>$10</p>
+<button onclick="add('Creator Bundle')">Add</button>
+</div>
 
-  <div class="card" data-price="10">
-    <img src="https://picsum.photos/300?3" alt="Creator Bundle">
-    <h3>Creator Bundle</h3>
-    <p>$10</p>
-    <button onclick="add(this)">Add to Cart</button>
-  </div>
 </section>
 
-<footer>© 2026 KLYRO</footer>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
 
-// Firebase config
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCgR9puzHe3VHKBJ21JnZEMpAtIPyV2_NA",
-  authDomain: "klyrostore.firebaseapp.com",
-  projectId: "klyrostore",
-  storageBucket: "klyrostore.firebasestorage.app",
-  messagingSenderId: "119902117751",
-  appId: "1:119902117751:web:862c872a5911e796f44b72"
+ apiKey: "AIzaSyCgR9puzHe3VHKBJ21JnZEMpAtIPyV2_NA",
+ authDomain: "klyrostore.firebaseapp.com",
+ projectId: "klyrostore",
+ appId: "1:119902117751:web:862c872a5911e796f44b72"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-let cart = [];
-const countEl = document.getElementById("count");
-const loginBtn = document.getElementById("loginBtn");
-const userNameEl = document.getElementById("userName");
+let cart=[];
+let userEmail="";
 
-loginBtn.addEventListener("click", () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(result => {
-      const user = result.user;
-      userNameEl.textContent = `Hello, ${user.displayName}`;
-      loginBtn.style.display = "none";
-    })
-    .catch(err => alert(err.message));
-});
-
-// Add to cart
-function add(button){
-  const card = button.parentElement;
-  const itemName = card.querySelector("h3").innerText;
-  const price = parseFloat(card.dataset.price);
-  cart.push({name:itemName, price:price});
-  countEl.textContent = cart.length;
-  localStorage.setItem("cart", JSON.stringify(cart));
+window.add=function(item){
+ cart.push(item);
+ count.innerText=cart.length;
+ localStorage.setItem("cart",JSON.stringify(cart));
 }
+
+window.checkout=function(){
+ if(cart.length==0) return alert("Cart empty");
+ location.href="checkout.html";
+}
+
+window.signup=function(){
+ createUserWithEmailAndPassword(auth,email.value,password.value)
+ .then(r=>{
+ user.textContent=r.user.email;
+ userEmail=r.user.email;
+ alert("Account created");
+ })
+ .catch(e=>alert(e.message));
+}
+
+window.login=function(){
+ signInWithEmailAndPassword(auth,email.value,password.value)
+ .then(r=>{
+ user.textContent=r.user.email;
+ userEmail=r.user.email;
+ alert("Logged in");
+ })
+ .catch(e=>alert(e.message));
+}
+
 </script>
 
 </body>
