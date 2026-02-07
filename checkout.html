@@ -1,74 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>KLYRO Checkout</title>
+<meta charset="UTF-8">
+<title>KLYRO Store</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <style>
-body{background:#0b0b0b;color:white;font-family:Arial;text-align:center;}
-.box{max-width:400px;margin:auto;background:#111;padding:20px;border-radius:12px;margin-top:50px;}
-button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold;cursor:pointer;}
-input{padding:8px;width:90%;margin-bottom:10px;}
+/* --- GENERAL --- */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #0b0b0b;
+  color: white;
+}
+
+/* --- TOPBAR --- */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #111;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+nav h2 {
+  margin: 0;
+  font-size: 24px;
+}
+nav .cart {
+  background: #fff;
+  color: #111;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+nav .cart:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+/* --- PRODUCT GRID --- */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  padding: 30px;
+}
+
+/* --- PRODUCT CARD --- */
+.card {
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 8px #000;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(255,255,255,0.2);
+}
+.card img {
+  width: 100%;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+.card img:hover {
+  transform: scale(1.05);
+}
+
+/* --- BUTTONS --- */
+button {
+  margin-top: 12px;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  background: #fff;
+  color: #111;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: #ff5e5e;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* --- FOOTER --- */
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
+}
 </style>
 </head>
 <body>
 
-<h1>Checkout</h1>
-<div class="box">
-<div id="items"></div>
-<br>
-<b>Total: $<span id="total">0</span></b>
-<br><br>
-<input id="email" placeholder="Receipt Email">
-<br>
-<button onclick="buy()">Confirm Purchase</button>
-</div>
+<!-- TOPBAR -->
+<nav>
+  <h2>KLYRO Store</h2>
+  <div class="cart" onclick="checkout()">🛒 Cart: <span id="count">0</span></div>
+</nav>
+
+<!-- PRODUCTS -->
+<section class="products">
+  <div class="card">
+    <img src="https://picsum.photos/300?1" alt="PFP Pack">
+    <h3>PFP Pack</h3>
+    <p>$5</p>
+    <button onclick="addToCart('PFP Pack')">Add to Cart</button>
+  </div>
+
+  <div class="card">
+    <img src="https://picsum.photos/300?2" alt="Wallpaper">
+    <h3>Wallpaper</h3>
+    <p>$3</p>
+    <button onclick="addToCart('Wallpaper')">Add to Cart</button>
+  </div>
+
+  <div class="card">
+    <img src="https://picsum.photos/300?3" alt="Creator Bundle">
+    <h3>Creator Bundle</h3>
+    <p>$10</p>
+    <button onclick="addToCart('Creator Bundle')">Add to Cart</button>
+  </div>
+</section>
+
+<footer>
+© 2026 KLYRO
+</footer>
 
 <script>
-/* 🔴 EMAILJS CONFIG */
-emailjs.init("PASTE_PUBLIC_KEY"); // your EmailJS public key
-const SERVICE_ID = "PASTE_SERVICE_ID"; // your EmailJS service ID
-const TEMPLATE_ID = "template_7hoecnn"; // your template ID
+/* --- CART SCRIPT --- */
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+document.getElementById("count").innerText = cart.length;
 
-/* CART LOGIC */
-const prices = {
- "PFP Pack":5,
- "Wallpaper":3,
- "Creator Bundle":10
-};
-
-const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-let sum = 0;
-if(cart.length === 0){
-  items.innerHTML = "Cart is empty!";
-} else {
-  items.innerHTML = cart.map(i=>{
-    sum += prices[i];
-    return i + " - $" + prices[i];
-  }).join("<br>");
+function addToCart(item){
+  cart.push(item);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  document.getElementById("count").innerText = cart.length;
+  alert(item + " added to cart!");
 }
 
-total.innerText = sum;
-
-function buy(){
- const userEmail = document.getElementById("email").value;
- if(!userEmail) return alert("Enter email!");
- if(cart.length === 0) return alert("Cart empty!");
-
- // Send email using EmailJS
- emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-   to_email: userEmail,
-   items: cart.join(", "),
-   total: sum
- }).then(()=>{
-   alert("Purchase complete! Receipt sent to " + userEmail);
-   localStorage.removeItem("cart"); // clear cart
-   window.location.href = "index.html"; // back to store
- }).catch(err=>{
-   console.error(err);
-   alert("Error sending email. Try again.");
- });
+function checkout(){
+  if(cart.length === 0){
+    alert("Cart is empty!");
+    return;
+  }
+  window.location.href = "checkout.html";
 }
 </script>
 
