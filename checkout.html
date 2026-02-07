@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KLYRO Store - Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Montserrat',sans-serif;background:#0b0b0b;color:#fff;padding:20px;}
+h1{text-align:center;}
+button{padding:10px 20px;border:none;border-radius:25px;background:#1e90ff;color:#fff;font-weight:bold;cursor:pointer;margin:5px;}
+button:hover{background:#0d66c1;}
+.cart-item{margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<h1>Checkout</h1>
+<div id="cartItems"></div>
+<p>Total Items: <span id="totalItems">0</span></p>
+<p>Total Price: $<span id="totalPrice">0</span></p>
+<button id="confirmBtn">Confirm Purchase</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCgR9puzHe3VHKBJ21JnZEMpAtIPyV2_NA",
+  authDomain: "klyrostore.firebaseapp.com",
+  projectId: "klyrostore",
+  storageBucket: "klyrostore.firebasestorage.app",
+  messagingSenderId: "119902117751",
+  appId: "1:119902117751:web:862c872a5911e796f44b72"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartItemsEl = document.getElementById("cartItems");
+const totalItemsEl = document.getElementById("totalItems");
+const totalPriceEl = document.getElementById("totalPrice");
+
+// Show cart items
+function displayCart(){
+  cartItemsEl.innerHTML = "";
+  let total = 0;
+  cart.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.textContent = `${item.name} - $${item.price}`;
+    cartItemsEl.appendChild(div);
+    total += item.price;
+  });
+  totalItemsEl.textContent = cart.length;
+  totalPriceEl.textContent = total.toFixed(2);
+}
+displayCart();
+
+// Confirm purchase
+document.getElementById("confirmBtn").addEventListener("click", async ()=>{
+  let user = auth.currentUser;
+  if(!user){
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider).then(result=>{user=result.user;});
+  }
+  try{
+    const totalPrice = cart.reduce((sum,item)=>sum+item.price,0);
+    await addDoc(collection(db,"purchases"),{
+      userId:user.uid,
+      userEmail:user.email,
+      items:cart,
+      total:totalPrice,
+      timestamp:serverTimestamp()
+    });
+    alert("Purchase complete! Receipt sent to your email.");
+    localStorage.removeItem("cart");
+    window.location.href="index.html";
+  }catch(err){ alert("Error saving purchase!"); console.error(err); }
+});
+</script>
+
+</body>
+</html>
