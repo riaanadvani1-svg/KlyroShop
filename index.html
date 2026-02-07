@@ -6,26 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
 
-body{
-margin:0;
-font-family:Arial;
-background:#0b0b0b;
-color:white;
-}
-
-/* TOP BAR */
 nav{
 position:sticky;
 top:0;
-z-index:10;
 display:flex;
-justify-content:space-between;
+justify-content:flex-end;
+gap:15px;
 align-items:center;
-padding:15px 30px;
+padding:15px 25px;
 background:#111;
-box-shadow:0 5px 20px #000;
 }
 
 nav img{height:40px}
@@ -33,18 +24,11 @@ nav img{height:40px}
 .cart{
 background:white;
 color:black;
-padding:8px 18px;
-border-radius:25px;
+padding:8px 15px;
+border-radius:20px;
 cursor:pointer;
-transition:.25s;
 }
 
-.cart:hover{
-transform:scale(1.1);
-box-shadow:0 0 10px white;
-}
-
-/* PRODUCTS GRID */
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -52,60 +36,34 @@ gap:25px;
 padding:40px;
 }
 
-/* PRODUCT CARD */
 .card{
 background:#111;
 border-radius:18px;
 padding:15px;
 text-align:center;
-box-shadow:0 0 15px #000;
-transition:.3s;
-overflow:hidden;
+transition:.2s;
 }
 
-.card:hover{
-transform:translateY(-10px) scale(1.02);
-box-shadow:0 0 25px rgba(255,255,255,.2);
-}
+.card:hover{transform:scale(1.05)}
 
-.card img{
-width:100%;
-border-radius:12px;
-transition:.4s;
-}
+.card img{width:100%;border-radius:10px}
 
-.card:hover img{
-transform:scale(1.1);
-}
-
-.card h3{margin:12px 0 5px}
-.card p{opacity:.7}
-
-/* BUTTON */
 button{
-margin-top:10px;
-padding:10px 22px;
+padding:10px 20px;
 border:none;
-border-radius:25px;
+border-radius:20px;
 font-weight:bold;
 cursor:pointer;
-background:white;
-transition:.25s;
 }
-
-button:hover{
-background:#ff4444;
-color:white;
-transform:scale(1.1);
-}
+button:hover{background:#ff4444;color:white}
 </style>
 </head>
 
 <body>
 
 <nav>
-<img src="IMG_5093.png">
 <div class="cart" onclick="checkout()">🛒 <span id="count">0</span></div>
+<img src="IMG_5093.png">
 </nav>
 
 <div class="products">
@@ -114,26 +72,25 @@ transform:scale(1.1);
 <img src="https://picsum.photos/300?1">
 <h3>PFP Pack</h3>
 <p>$5</p>
-<button onclick="add('PFP Pack')">Add to Cart</button>
+<button onclick="add('PFP Pack')">Add</button>
 </div>
 
 <div class="card">
 <img src="https://picsum.photos/300?2">
 <h3>Wallpaper</h3>
 <p>$3</p>
-<button onclick="add('Wallpaper')">Add to Cart</button>
+<button onclick="add('Wallpaper')">Add</button>
 </div>
 
 <div class="card">
 <img src="https://picsum.photos/300?3">
 <h3>Creator Bundle</h3>
 <p>$10</p>
-<button onclick="add('Creator Bundle')">Add to Cart</button>
+<button onclick="add('Creator Bundle')">Add</button>
 </div>
 
 </div>
 
 <script src="main.js"></script>
-
 </body>
 </html>
