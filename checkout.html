@@ -8,12 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0b0b;
-color:white;
-}
+body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
 
 .box{
 max-width:650px;
@@ -21,22 +16,11 @@ margin:60px auto;
 background:#111;
 padding:30px;
 border-radius:20px;
-box-shadow:0 0 25px #000;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-margin-bottom:15px;
-}
-
-th,td{
-padding:12px;
-}
-
+table{width:100%;border-collapse:collapse}
+td,th{padding:12px}
 th{background:#222}
-
-tr:hover{background:#1f1f1f}
 
 input{
 width:100%;
@@ -53,22 +37,11 @@ padding:14px;
 border:none;
 border-radius:30px;
 font-weight:bold;
-background:white;
-transition:.3s;
 cursor:pointer;
 }
+button:hover{background:#ff4444;color:white}
 
-button:hover{
-background:#ff4444;
-color:white;
-transform:scale(1.05);
-}
-
-.total{
-text-align:right;
-font-size:20px;
-margin-top:10px;
-}
+.total{text-align:right;font-size:20px;margin-top:10px}
 </style>
 </head>
 
@@ -76,7 +49,7 @@ margin-top:10px;
 
 <div class="box">
 
-<h2>Secure Checkout</h2>
+<h2>Checkout</h2>
 
 <table>
 <thead>
@@ -87,7 +60,7 @@ margin-top:10px;
 
 <div class="total">Total: $<span id="total"></span></div>
 
-<input id="email" placeholder="Email for receipt">
+<input id="email" placeholder="Email">
 
 <button onclick="buy()">Complete Purchase</button>
 
