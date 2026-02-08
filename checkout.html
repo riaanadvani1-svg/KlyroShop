@@ -5,8 +5,6 @@
 <title>Checkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
 <style>
 body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
 
@@ -18,27 +16,13 @@ padding:30px;
 border-radius:20px;
 }
 
-table{width:100%;border-collapse:collapse}
+table{width:100%;border-collapse:collapse;margin-bottom:15px}
 td,th{padding:12px}
 th{background:#222}
 
-input{
-width:100%;
-padding:12px;
-border-radius:15px;
-border:none;
-margin-top:15px;
-}
+input{width:100%;padding:12px;border-radius:15px;border:none;margin-top:15px}
 
-button{
-width:100%;
-margin-top:20px;
-padding:14px;
-border:none;
-border-radius:30px;
-font-weight:bold;
-cursor:pointer;
-}
+button{width:100%;margin-top:20px;padding:14px;border:none;border-radius:30px;font-weight:bold;cursor:pointer}
 button:hover{background:#ff4444;color:white}
 
 .total{text-align:right;font-size:20px;margin-top:10px}
@@ -60,13 +44,29 @@ button:hover{background:#ff4444;color:white}
 
 <div class="total">Total: $<span id="total"></span></div>
 
-<input id="email" placeholder="Email">
-
-<button onclick="buy()">Complete Purchase</button>
+<form id="checkoutForm" action="https://formspree.io/f/mreagrvg" method="POST" target="_blank">
+<input type="email" name="email" id="email" placeholder="Your email" required>
+<input type="hidden" name="items" id="formItems">
+<input type="hidden" name="total" id="formTotal">
+<button type="submit">Complete Purchase</button>
+</form>
 
 </div>
 
 <script src="main.js"></script>
+<script>
+/* populate form hidden fields and total */
+const formItems=document.getElementById("formItems");
+const formTotal=document.getElementById("formTotal");
+if(document.getElementById("items")){
+let total=0;
+formItems.value=cart.join(", ");
+total=cart.reduce((sum,i)=>sum+prices[i],0);
+formTotal.value=total;
+document.getElementById("items").innerHTML=cart.map(i=>`<tr><td>${i}</td><td>$${prices[i]}</td></tr>`).join("");
+document.getElementById("total").innerText=total;
+}
+</script>
 
 </body>
 </html>
