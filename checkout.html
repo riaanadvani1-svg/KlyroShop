@@ -3,90 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Checkout</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
-.box{max-width:650px;margin:60px auto;background:#111;padding:30px;border-radius:20px}
-table{width:100%;border-collapse:collapse;margin-bottom:15px}
-td,th{padding:12px}
-th{background:#222}
+.box{max-width:600px;margin:60px auto;background:#111;padding:30px;border-radius:20px}
+table{width:100%}
 input{width:100%;padding:12px;border-radius:15px;border:none;margin-top:15px}
-button{width:100%;margin-top:20px;padding:14px;border:none;border-radius:30px;font-weight:bold;cursor:pointer}
-button:hover{background:#ff4444;color:white}
-.total{text-align:right;font-size:20px;margin-top:10px}
+button{width:100%;margin-top:20px;padding:14px;border-radius:30px;border:none}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>Checkout</h2>
 
-  <table>
-    <thead>
-      <tr><th>Item</th><th>Price</th></tr>
-    </thead>
-    <tbody id="items"></tbody>
-  </table>
+<h2>Checkout</h2>
 
-  <div class="total">Total: $<span id="total"></span></div>
+<table id="items"></table>
 
-  <form id="checkoutForm" action="https://formspree.io/f/mreagrvg" method="POST">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="email" id="emailInput" placeholder="Your Email" required>
+<h3>Total: $<span id="total"></span></h3>
 
-    <!-- This tells Formspree to send the email to the user -->
-    <input type="hidden" name="_replyto" id="replyto">
+<form id="form">
+<input id="email" type="email" placeholder="Your Email" required>
+<button>Complete Purchase</button>
+</form>
 
-    <!-- Hidden fields -->
-    <input type="hidden" name="items" id="formItems">
-    <input type="hidden" name="total" id="formTotal">
-
-    <button type="submit">Complete Purchase</button>
-  </form>
-
-  <button onclick="goBack()" style="margin-top:15px;">Back to Store</button>
 </div>
 
 <script src="main.js"></script>
-<script>
-const form = document.getElementById("checkoutForm");
-const formItems = document.getElementById("formItems");
-const formTotal = document.getElementById("formTotal");
-const replyto = document.getElementById("replyto");
-
-// populate checkout table
-window.addEventListener("load", () => {
-  let total = 0;
-  const counts = {};
-  cart.forEach(i => counts[i] = (counts[i] || 0) + 1);
-
-  document.getElementById("items").innerHTML = Object.keys(counts).map(i => {
-    const subtotal = prices[i]*counts[i];
-    total += subtotal;
-    return `<tr><td>${i} x ${counts[i]}</td><td>$${subtotal}</td></tr>`;
-  }).join("");
-
-  document.getElementById("total").innerText = total;
-});
-
-form.addEventListener("submit", function(e){
-  // set hidden receipt fields
-  formItems.value = cart.join(", ");
-  formTotal.value = cart.reduce((sum,i)=>sum+prices[i],0);
-  
-  // make Formspree send the email to the buyer
-  replyto.value = document.getElementById("emailInput").value;
-
-  // clear cart
-  localStorage.removeItem("cart");
-});
-
-function goBack(){
-  window.location.href = "index.html";
-}
-</script>
-
 </body>
 </html>
