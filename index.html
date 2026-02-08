@@ -1,61 +1,87 @@
-]<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>KLYRO Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
-/* NAV */
-nav{position:sticky;top:0;display:flex;justify-content:flex-end;align-items:center;gap:15px;padding:15px 25px;background:#111}
-nav img{height:40px}
-/* CART */
-.cart{background:white;color:black;padding:8px 15px;border-radius:20px;cursor:pointer;transition:.25s}
-.cart:hover{transform:scale(1.1);box-shadow:0 0 10px white;}
-/* PRODUCTS GRID */
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;padding:40px}
-/* CARD */
-.card{background:#111;border-radius:18px;padding:15px;text-align:center;transition:.3s}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 25px;
+background:#111;
+}
+
+.cart{
+background:white;
+color:black;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+padding:40px;
+}
+
+.card{
+background:#111;
+border-radius:18px;
+padding:15px;
+text-align:center;
+transition:.3s;
+}
+
 .card:hover{transform:scale(1.05)}
-.card img{width:100%;border-radius:10px;transition:.4s}
-.card:hover img{transform:scale(1.1)}
-button{padding:10px 20px;border:none;border-radius:20px;font-weight:bold;cursor:pointer;transition:.2s;margin-top:10px}
-button:hover{background:#ff4444;color:white}
+
+.card img{width:100%;border-radius:10px}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 
 <nav>
-  <div class="cart" onclick="checkout()">🛒 <span id="count">0</span></div>
-  <img src="IMG_5093.png">
+<h2>KLYRO</h2>
+<div class="cart" onclick="checkout()">🛒 <span id="count">0</span></div>
 </nav>
 
-<div style="text-align:center;margin-top:20px;">
-  <button onclick="checkout()" style="padding:12px 25px;border-radius:25px;font-weight:bold;cursor:pointer;">Go to Checkout</button>
+<div class="products">
+
+<div class="card">
+<img src="1860681c-087a-4eda-ada8-5b190b656f6c.png">
+<h3>PFP Pack (Neymar)</h3>
+<p>$5</p>
+<button onclick="add('PFP Pack')">Add to Cart</button>
 </div>
 
-<div class="products">
-  <div class="card">
-    <img src="https://picsum.photos/300?1">
-    <h3>PFP Pack</h3>
-    <p>$5</p>
-    <button onclick="add('PFP Pack')">Add to Cart</button>
-  </div>
+<div class="card">
+<img src="https://picsum.photos/300?2">
+<h3>Wallpaper</h3>
+<p>$3</p>
+<button onclick="add('Wallpaper')">Add to Cart</button>
+</div>
 
-  <div class="card">
-    <img src="https://picsum.photos/300?2">
-    <h3>Wallpaper</h3>
-    <p>$3</p>
-    <button onclick="add('Wallpaper')">Add to Cart</button>
-  </div>
+<div class="card">
+<img src="https://picsum.photos/300?3">
+<h3>Creator Bundle</h3>
+<p>$10</p>
+<button onclick="add('Creator Bundle')">Add to Cart</button>
+</div>
 
-  <div class="card">
-    <img src="https://picsum.photos/300?3">
-    <h3>Creator Bundle</h3>
-    <p>$10</p>
-    <button onclick="add('Creator Bundle')">Add to Cart</button>
-  </div>
 </div>
 
 <script src="main.js"></script>
