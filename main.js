@@ -1,52 +1,41 @@
-let prices={
-"PFP Pack":5,
-"Wallpaper":3,
-"Creator Bundle":10
-};
-
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-
-function save(){
-localStorage.setItem("cart",JSON.stringify(cart));
-document.getElementById("count")&&(document.getElementById("count").innerText=cart.length);
-}
-
-save();
-
-function add(item){
-cart.push(item);
-save();
-alert(item+" added!");
-}
-
-function checkout(){
-window.location="checkout.html";
-}
-
-// checkout page
-if(document.getElementById("items")){
-let total=0;
-document.getElementById("items").innerHTML=cart.map(i=>{
-total+=prices[i];
-return `<tr><td>${i}</td><td>$${prices[i]}</td></tr>`;
-}).join("");
-
-document.getElementById("total").innerText=total;
-
-document.getElementById("form").onsubmit=e=>{
-e.preventDefault();
-
-fetch("https://formspree.io/f/mreagrvg",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-email:document.getElementById("email").value,
-items:cart.join(", "),
-total:total
-})
+// Show loading on page load and hide after 1s
+window.addEventListener('load', () => {
+    setTimeout(()=>document.getElementById('loading').classList.add('hidden'), 500);
 });
 
-alert("Receipt sent!");
-localStorage.removeItem("cart");
-};
+// Cart Logic
+let cart = JSON.parse(localStorage.getItem('klyroCart') || "[]");
+
+function addToCart(name, price){
+  const existing = cart.find(i=>i.name===name);
+  if(existing){ existing.quantity += 1; } 
+  else { cart.push({name, price, quantity:1}); }
+  localStorage.setItem('klyroCart', JSON.stringify(cart));
+  alert(`${name} added to cart!`);
 }
+
+function displayCart(){
+  const cartItemsDiv = document.getElementById('cart-items');
+  if(!cartItemsDiv) return;
+  cartItemsDiv.innerHTML = '';
+  let total = 0;
+  cart.forEach(item=>{
+    total += item.price*item.quantity;
+    const p = document.createElement('p');
+    p.textContent = `${item.name} x ${item.quantity} = $${item.price*item.quantity}`;
+    cartItemsDiv.appendChild(p);
+  });
+  document.getElementById('total-price').textContent = total;
+}
+
+// Page transition loader
+document.querySelectorAll('a').forEach(link=>{
+  link.addEventListener('click', e=>{
+    if(link.getAttribute('target')!=='_blank'){
+      e.preventDefault();
+      document.getElementById('loading').classList.remove('hidden');
+      setTimeout(()=>{ window.location = link.href; }, 500);
+    }
+  });
+});
+
