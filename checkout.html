@@ -14,13 +14,12 @@
 </head>
 <body>
 
-<!-- Loading Screen -->
 <div id="loading">
     <div class="spinner"></div>
 </div>
 
 <header>
-  <img src="IMG_5093.png" alt="Klyro Logo">
+  <img src="IMG_5093.png" alt="Klyro Logo" class="logo">
   <h1>KlyroShop Checkout</h1>
 </header>
 
@@ -30,15 +29,15 @@
     <input type="email" name="customer_email" placeholder="Your Email" required>
     <div id="cart-items"></div>
     <p><strong>Total: $<span id="total-price">0</span></strong></p>
-    <button type="submit">Place Order</button>
+    <button type="submit" class="checkout-btn">Place Order</button>
   </form>
 </section>
 
 <script src="main.js"></script>
 <script>
-  displayCart();
+displayCart();
 
-  document.getElementById("checkout-form").addEventListener("submit", function(e){
+document.getElementById("checkout-form").addEventListener("submit", function(e){
     e.preventDefault();
     const cart = JSON.parse(localStorage.getItem('klyroCart') || "[]");
     if(cart.length === 0){ alert("Cart is empty!"); return; }
@@ -51,7 +50,6 @@
       total: cart.reduce((sum,i)=>sum+i.price*i.quantity,0)
     };
 
-    // EmailJS
     emailjs.send("YOUR_SERVICE_ID", "TEMPLATE_ID_CUSTOMER", formData)
       .then(()=>console.log("Receipt sent"), err=>console.error(err));
     emailjs.send("YOUR_SERVICE_ID", "TEMPLATE_ID_OWNER", formData)
@@ -61,7 +59,7 @@
     localStorage.removeItem('klyroCart');
     displayCart();
     form.reset();
-  });
+});
 </script>
 </body>
 </html>
