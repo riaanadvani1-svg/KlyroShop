@@ -7,7 +7,7 @@
 
 <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
-emailjs.init("service_vyelgrs");
+emailjs.init("YOUR_PUBLIC_KEY");
 </script>
 </head>
 
@@ -26,16 +26,14 @@ emailjs.init("service_vyelgrs");
 </header>
 
 <form id="checkout-form">
+  <input name="customer_name" placeholder="Your Name" required>
+  <input name="customer_email" placeholder="Your Email" required>
 
-<input name="customer_name" placeholder="Your Name" required>
-<input name="customer_email" placeholder="Your Email" required>
+  <div id="cart-items"></div>
 
-<div id="cart-items"></div>
+  <h3>Total: $<span id="total-price">0</span></h3>
 
-<h3>Total: $<span id="total-price">0</span></h3>
-
-<button class="checkout-btn">Place Order</button>
-
+  <button class="checkout-btn">Place Order</button>
 </form>
 
 <div id="success">✅ Order Sent!</div>
