@@ -7,32 +7,13 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
-
-.box{
-max-width:650px;
-margin:60px auto;
-background:#111;
-padding:30px;
-border-radius:20px;
-}
-
+.box{max-width:650px;margin:60px auto;background:#111;padding:30px;border-radius:20px}
 table{width:100%;border-collapse:collapse;margin-bottom:15px}
 td,th{padding:12px}
 th{background:#222}
-
 input{width:100%;padding:12px;border-radius:15px;border:none;margin-top:15px}
-
-button{
-width:100%;
-margin-top:20px;
-padding:14px;
-border:none;
-border-radius:30px;
-font-weight:bold;
-cursor:pointer;
-}
+button{width:100%;margin-top:20px;padding:14px;border:none;border-radius:30px;font-weight:bold;cursor:pointer}
 button:hover{background:#ff4444;color:white}
-
 .total{text-align:right;font-size:20px;margin-top:10px}
 </style>
 </head>
@@ -63,17 +44,26 @@ button:hover{background:#ff4444;color:white}
 
 <script src="main.js"></script>
 <script>
-/* populate form hidden fields and total */
+const form=document.getElementById("checkoutForm");
 const formItems=document.getElementById("formItems");
 const formTotal=document.getElementById("formTotal");
+
 if(document.getElementById("items")){
 let total=0;
-formItems.value=cart.join(", ");
-total=cart.reduce((sum,i)=>sum+prices[i],0);
-formTotal.value=total;
-document.getElementById("items").innerHTML=cart.map(i=>`<tr><td>${i}</td><td>$${prices[i]}</td></tr>`).join("");
+document.getElementById("items").innerHTML=cart.map(i=>{
+total+=prices[i];
+return `<tr><td>${i}</td><td>$${prices[i]}</td></tr>`;
+}).join("");
 document.getElementById("total").innerText=total;
 }
+
+/* populate hidden inputs just before submitting */
+form.addEventListener("submit", function(e){
+formItems.value=cart.join(", ");
+formTotal.value=cart.reduce((sum,i)=>sum+prices[i],0);
+/* clear cart */
+localStorage.removeItem("cart");
+});
 </script>
 
 </body>
