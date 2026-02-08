@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Checkout</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
 body{margin:0;font-family:Arial;background:#0b0b0b;color:white}
 .box{max-width:650px;margin:60px auto;background:#111;padding:30px;border-radius:20px}
@@ -21,7 +20,6 @@ button:hover{background:#ff4444;color:white}
 <body>
 
 <div class="box">
-
 <h2>Checkout</h2>
 
 <table>
@@ -34,37 +32,18 @@ button:hover{background:#ff4444;color:white}
 <div class="total">Total: $<span id="total"></span></div>
 
 <form id="checkoutForm" action="https://formspree.io/f/mreagrvg" method="POST" target="_blank">
-<input type="email" name="email" id="email" placeholder="Your email" required>
+<input type="text" name="name" placeholder="Your Name" required>
+<input type="email" name="email" placeholder="Your Email" required>
+<input type="text" name="address" placeholder="Shipping Address" required>
+
+<!-- Hidden fields -->
 <input type="hidden" name="items" id="formItems">
 <input type="hidden" name="total" id="formTotal">
+
 <button type="submit">Complete Purchase</button>
 </form>
-
 </div>
 
 <script src="main.js"></script>
-<script>
-const form=document.getElementById("checkoutForm");
-const formItems=document.getElementById("formItems");
-const formTotal=document.getElementById("formTotal");
-
-if(document.getElementById("items")){
-let total=0;
-document.getElementById("items").innerHTML=cart.map(i=>{
-total+=prices[i];
-return `<tr><td>${i}</td><td>$${prices[i]}</td></tr>`;
-}).join("");
-document.getElementById("total").innerText=total;
-}
-
-/* populate hidden inputs just before submitting */
-form.addEventListener("submit", function(e){
-formItems.value=cart.join(", ");
-formTotal.value=cart.reduce((sum,i)=>sum+prices[i],0);
-/* clear cart */
-localStorage.removeItem("cart");
-});
-</script>
-
 </body>
 </html>
