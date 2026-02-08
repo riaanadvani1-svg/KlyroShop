@@ -1,96 +1,95 @@
-// =====================
-// FAST LOADER
-// =====================
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loading");
-  if (loader) {
-    loader.style.opacity = "0";
-    setTimeout(() => loader.style.display = "none", 200);
-  }
+// LOADER
+window.onload=()=>{
+loading.style.opacity=0;
+setTimeout(()=>loading.style.display="none",200);
+};
+
+document.querySelectorAll("a").forEach(a=>{
+a.onclick=e=>{
+e.preventDefault();
+loading.style.display="flex";
+setTimeout(()=>location=a.href,80);
+};
 });
 
-// Page switch loader
-document.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", e => {
-    if (link.target !== "_blank") {
-      e.preventDefault();
-      const loader = document.getElementById("loading");
-      if (loader) {
-        loader.style.display = "flex";
-        loader.style.opacity = "1";
-      }
-      setTimeout(() => window.location = link.href, 80);
-    }
-  });
-});
-
-// =====================
 // CART
-// =====================
-let cart = JSON.parse(localStorage.getItem("klyroCart") || "[]");
+let cart=JSON.parse(localStorage.klyro||"[]");
 
-function addToCart(name, price) {
-  const found = cart.find(i => i.name === name);
-  if (found) found.quantity++;
-  else cart.push({ name, price, quantity: 1 });
-
-  localStorage.setItem("klyroCart", JSON.stringify(cart));
-  alert("Added to cart!");
+function addToCart(n,p,i){
+let f=cart.find(x=>x.name==n);
+if(f)f.qty++;
+else cart.push({name:n,price:p,img:i,qty:1});
+localStorage.klyro=JSON.stringify(cart);
+alert("Added to cart!");
 }
 
-function displayCart() {
-  const div = document.getElementById("cart-items");
-  if (!div) return;
+// SHOW CART
+function displayCart(){
+cart=JSON.parse(localStorage.klyro||"[]");
+let d=document.getElementById("cart-items");
+if(!d)return;
+d.innerHTML="";
+let total=0;
 
-  cart = JSON.parse(localStorage.getItem("klyroCart") || "[]");
-  div.innerHTML = "";
+cart.forEach((x,i)=>{
+total+=x.price*x.qty;
 
-  let total = 0;
-  let receipt = "";
-
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-    receipt += `${item.name} x${item.quantity} — $${item.price * item.quantity}\n`;
-
-    div.innerHTML += `<p>${item.name} x${item.quantity} — $${item.price * item.quantity}</p>`;
-  });
-
-  document.getElementById("total-price").innerText = total;
-  return receipt;
-}
-
-// =====================
-// THEME (BLACK DEFAULT)
-// =====================
-document.body.classList.remove("light");
-
-document.getElementById("theme-switch")?.addEventListener("click", e => {
-  e.preventDefault();
-  document.body.classList.toggle("light");
+d.innerHTML+=`
+<div class="row">
+<img src="${x.img}">
+${x.name} x${x.qty}
+<button onclick="qty(${i},1)">+</button>
+<button onclick="qty(${i},-1)">-</button>
+<button onclick="removeItem(${i})">X</button>
+</div>`;
 });
 
-// =====================
-// CHECKOUT EMAIL
-// =====================
-document.getElementById("checkout-form")?.addEventListener("submit", function(e) {
-  e.preventDefault();
+total-price.innerText=total;
+}
 
-  const receipt = displayCart();
-  const total = document.getElementById("total-price").innerText;
+// QUANTITY
+function qty(i,v){
+cart[i].qty+=v;
+if(cart[i].qty<=0)cart.splice(i,1);
+localStorage.klyro=JSON.stringify(cart);
+displayCart();
+}
 
-  if (!receipt) {
-    alert("Cart empty");
-    return;
-  }
+// REMOVE
+function removeItem(i){
+cart.splice(i,1);
+localStorage.klyro=JSON.stringify(cart);
+displayCart();
+}
 
-  emailjs.send("service_vyelgrs", "template_aummpt5", {
-    customer_name: this.customer_name.value,
-    customer_email: this.customer_email.value,
-    order_details: receipt,
-    total: total
-  }).then(() => {
-    alert("Order sent! Receipt emailed.");
-    localStorage.removeItem("klyroCart");
-    location.reload();
-  });
+// THEME
+theme-switch?.onclick=e=>{
+e.preventDefault();
+document.body.classList.toggle("light");
+};
+
+// CHECKOUT
+checkout-form?.addEventListener("submit",e=>{
+e.preventDefault();
+
+let order="";
+let total=0;
+
+cart.forEach(i=>{
+order+=`${i.name} x${i.qty} = $${i.price*i.qty}\n`;
+total+=i.price*i.qty;
+});
+
+let id="KLYRO-"+Math.floor(Math.random()*99999);
+
+emailjs.send("service_vyelgrs","template_aummpt5",{
+customer_name:e.target.customer_name.value,
+customer_email:e.target.customer_email.value,
+order_details:order,
+total:total,
+order_id:id
+});
+
+success.style.display="block";
+localStorage.clear();
 });
