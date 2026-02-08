@@ -6,21 +6,28 @@
 <title>Checkout - KlyroShop</title>
 <link rel="stylesheet" href="style.css">
 
-<!-- EmailJS -->
+<!-- EmailJS SDK -->
 <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
-  (function(){ emailjs.init("YOUR_EMAILJS_USER_ID"); })();
+  (function(){ 
+    emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS User ID
+  })();
 </script>
 </head>
 <body>
 
+<!-- Loader -->
 <div id="loading">
-    <div class="spinner"></div>
+  <div class="spinner"></div>
 </div>
 
 <header>
   <img src="IMG_5093.png" alt="Klyro Logo" class="logo">
-  <h1>KlyroShop Checkout</h1>
+  <nav class="topbar">
+    <a href="index.html">Home</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="#" id="theme-switch">Switch Theme</a>
+  </nav>
 </header>
 
 <section class="checkout">
@@ -28,7 +35,7 @@
     <input type="text" name="customer_name" placeholder="Your Name" required>
     <input type="email" name="customer_email" placeholder="Your Email" required>
     <div id="cart-items"></div>
-    <p><strong>Total: $<span id="total-price">0</span></strong></p>
+    <p>Total: $<span id="total-price">0</span></p>
     <button type="submit" class="checkout-btn">Place Order</button>
   </form>
 </section>
@@ -37,28 +44,32 @@
 <script>
 displayCart();
 
-document.getElementById("checkout-form").addEventListener("submit", function(e){
+document.getElementById('checkout-form').addEventListener('submit', function(e){
     e.preventDefault();
-    const cart = JSON.parse(localStorage.getItem('klyroCart') || "[]");
-    if(cart.length === 0){ alert("Cart is empty!"); return; }
+    const cart = JSON.parse(localStorage.getItem('klyroCart')||"[]");
+    if(cart.length===0){ alert("Cart is empty"); return; }
 
-    const form = e.target;
     const formData = {
-      customer_name: form.customer_name.value,
-      customer_email: form.customer_email.value,
-      order_details: cart.map(i=>`${i.name} x ${i.quantity} = $${i.price*i.quantity}`).join('\n'),
-      total: cart.reduce((sum,i)=>sum+i.price*i.quantity,0)
+        customer_name: this.customer_name.value,
+        customer_email: this.customer_email.value,
+        order_details: cart.map(i=>`${i.name} x ${i.quantity} = $${i.price*i.quantity}`).join('\n'),
+        total: cart.reduce((sum,i)=>sum+i.price*i.quantity,0)
     };
 
-    emailjs.send("YOUR_SERVICE_ID", "TEMPLATE_ID_CUSTOMER", formData)
-      .then(()=>console.log("Receipt sent"), err=>console.error(err));
-    emailjs.send("YOUR_SERVICE_ID", "TEMPLATE_ID_OWNER", formData)
-      .then(()=>console.log("Order sent"), err=>console.error(err));
+    // Send email to customer
+    emailjs.send("service_vyelgrs", "template_aummpt5", formData)
+      .then(()=>console.log("Customer email sent"))
+      .catch(err=>console.error(err));
 
-    alert("Order placed successfully!");
+    // Send email to owner
+    emailjs.send("service_vyelgrs", "template_aummpt5", formData)
+      .then(()=>console.log("Order email sent"))
+      .catch(err=>console.error(err));
+
+    alert("Order placed successfully! Check your email.");
     localStorage.removeItem('klyroCart');
     displayCart();
-    form.reset();
+    this.reset();
 });
 </script>
 </body>
