@@ -8,15 +8,18 @@
 </head>
 <body>
 
-<!-- Loading Screen -->
+<!-- Loader -->
 <div id="loading">
-    <div class="spinner"></div>
+  <div class="spinner"></div>
 </div>
 
 <header>
   <img src="IMG_5093.png" alt="Klyro Logo" class="logo">
-  <h1>KlyroShop</h1>
-  <p>If you want to quit, remember why you started.</p>
+  <nav class="topbar">
+    <a href="index.html">Home</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="#" id="theme-switch">Switch Theme</a>
+  </nav>
 </header>
 
 <section class="products">
@@ -26,16 +29,10 @@
     <p>$25</p>
     <button onclick="addToCart('Neymar PFP', 25)">Add to Cart</button>
   </div>
-  <div class="product">
-    <img src="https://via.placeholder.com/200x150.png?text=Product+2" alt="Product 2">
-    <h3>Product 2</h3>
-    <p>$15</p>
-    <button onclick="addToCart('Product 2', 15)">Add to Cart</button>
-  </div>
 </section>
 
 <div class="checkout-container">
-    <a href="checkout.html" class="checkout-btn">Go to Checkout</a>
+  <a href="checkout.html" class="checkout-btn">Go to Checkout</a>
 </div>
 
 <script src="main.js"></script>
