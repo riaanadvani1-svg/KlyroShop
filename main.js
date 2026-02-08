@@ -1,62 +1,52 @@
-// main.js
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-const prices = {
-  "PFP Pack": 5,
-  "Wallpaper": 3,
-  "Creator Bundle": 10
+let prices={
+"PFP Pack":5,
+"Wallpaper":3,
+"Creator Bundle":10
 };
 
-// Add item to cart
-function add(item) {
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCount();
-  alert(item + " added to cart!");
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+function save(){
+localStorage.setItem("cart",JSON.stringify(cart));
+document.getElementById("count")&&(document.getElementById("count").innerText=cart.length);
 }
 
-// Update cart count in nav
-function updateCount() {
-  if(document.getElementById("count")){
-    document.getElementById("count").innerText = cart.length;
-  }
+save();
+
+function add(item){
+cart.push(item);
+save();
+alert(item+" added!");
 }
 
-// Go to checkout page
-function checkout() {
-  window.location.href = "checkout.html";
+function checkout(){
+window.location="checkout.html";
 }
 
-// Populate checkout page if on checkout
-window.addEventListener("load", () => {
-  updateCount();
-  if(document.getElementById("items")){
-    let total = 0;
+// checkout page
+if(document.getElementById("items")){
+let total=0;
+document.getElementById("items").innerHTML=cart.map(i=>{
+total+=prices[i];
+return `<tr><td>${i}</td><td>$${prices[i]}</td></tr>`;
+}).join("");
 
-    // Count quantities
-    const counts = {};
-    cart.forEach(i => counts[i] = (counts[i] || 0) + 1);
+document.getElementById("total").innerText=total;
 
-    const itemsHTML = Object.keys(counts).map(i => {
-      const subtotal = prices[i] * counts[i];
-      total += subtotal;
-      return `<tr><td>${i} x ${counts[i]}</td><td>$${subtotal}</td></tr>`;
-    }).join("");
+document.getElementById("form").onsubmit=e=>{
+e.preventDefault();
 
-    document.getElementById("items").innerHTML = itemsHTML;
-    document.getElementById("total").innerText = total;
-
-    // Prepare form hidden inputs for Formspree
-    const form = document.getElementById("checkoutForm");
-    const formItems = document.getElementById("formItems");
-    const formTotal = document.getElementById("formTotal");
-
-    form.addEventListener("submit", function(e){
-      let itemsText = Object.keys(counts).map(i => `${i} x ${counts[i]} = $${counts[i]*prices[i]}`).join("\n");
-      formItems.value = itemsText;
-      formTotal.value = total;
-
-      // Clear cart
-      localStorage.removeItem("cart");
-    });
-  }
+fetch("https://formspree.io/f/mreagrvg",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+email:document.getElementById("email").value,
+items:cart.join(", "),
+total:total
+})
 });
+
+alert("Receipt sent!");
+localStorage.removeItem("cart");
+};
+}
