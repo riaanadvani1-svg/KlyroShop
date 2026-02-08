@@ -1,95 +1,124 @@
-// LOADER
-window.onload=()=>{
-loading.style.opacity=0;
-setTimeout(()=>loading.style.display="none",200);
+// ================= LOADER =================
+const loading = document.getElementById("loading");
+
+window.onload = () => {
+  if (loading) {
+    loading.style.opacity = 0;
+    setTimeout(() => loading.style.display = "none", 200);
+  }
 };
 
-document.querySelectorAll("a").forEach(a=>{
-a.onclick=e=>{
-e.preventDefault();
-loading.style.display="flex";
-setTimeout(()=>location=a.href,80);
-};
+document.querySelectorAll("a").forEach(a => {
+  a.addEventListener("click", e => {
+    if (!a.href.includes("#")) {
+      e.preventDefault();
+      if (loading) loading.style.display = "flex";
+      setTimeout(() => window.location = a.href, 80);
+    }
+  });
 });
 
-// CART
-let cart=JSON.parse(localStorage.klyro||"[]");
+// ================= CART =================
+let cart = JSON.parse(localStorage.klyro || "[]");
 
-function addToCart(n,p,i){
-let f=cart.find(x=>x.name==n);
-if(f)f.qty++;
-else cart.push({name:n,price:p,img:i,qty:1});
-localStorage.klyro=JSON.stringify(cart);
-alert("Added to cart!");
+function addToCart(name, price, img) {
+  let found = cart.find(x => x.name === name);
+  if (found) found.qty++;
+  else cart.push({ name, price, img, qty: 1 });
+  localStorage.klyro = JSON.stringify(cart);
+  alert("Added to cart!");
 }
 
-// SHOW CART
-function displayCart(){
-cart=JSON.parse(localStorage.klyro||"[]");
-let d=document.getElementById("cart-items");
-if(!d)return;
-d.innerHTML="";
-let total=0;
+// ================= DISPLAY CART =================
+function displayCart() {
+  cart = JSON.parse(localStorage.klyro || "[]");
+  const div = document.getElementById("cart-items");
+  if (!div) return;
 
-cart.forEach((x,i)=>{
-total+=x.price*x.qty;
+  div.innerHTML = "";
+  let total = 0;
 
-d.innerHTML+=`
-<div class="row">
-<img src="${x.img}">
-${x.name} x${x.qty}
-<button onclick="qty(${i},1)">+</button>
-<button onclick="qty(${i},-1)">-</button>
-<button onclick="removeItem(${i})">X</button>
-</div>`;
+  cart.forEach((x, i) => {
+    total += x.price * x.qty;
+
+    div.innerHTML += `
+    <div class="row">
+      <img src="${x.img}">
+      ${x.name} x${x.qty}
+      <button onclick="qty(${i},1)">+</button>
+      <button onclick="qty(${i},-1)">-</button>
+      <button onclick="removeItem(${i})">X</button>
+    </div>
+    `;
+  });
+
+  const totalEl = document.getElementById("total-price");
+  if (totalEl) totalEl.innerText = total;
+}
+
+// ================= QUANTITY =================
+function qty(i, v) {
+  cart[i].qty += v;
+  if (cart[i].qty <= 0) cart.splice(i, 1);
+  localStorage.klyro = JSON.stringify(cart);
+  displayCart();
+}
+
+// ================= REMOVE =================
+function removeItem(i) {
+  cart.splice(i, 1);
+  localStorage.klyro = JSON.stringify(cart);
+  displayCart();
+}
+
+// ================= THEME =================
+const themeSwitch = document.getElementById("theme-switch");
+themeSwitch?.addEventListener("click", e => {
+  e.preventDefault();
+  document.body.classList.toggle("light");
 });
 
-total-price.innerText=total;
-}
+// ================= CHECKOUT EMAIL =================
+const form = document.getElementById("checkout-form");
 
-// QUANTITY
-function qty(i,v){
-cart[i].qty+=v;
-if(cart[i].qty<=0)cart.splice(i,1);
-localStorage.klyro=JSON.stringify(cart);
-displayCart();
-}
+form?.addEventListener("submit", e => {
+  e.preventDefault();
 
-// REMOVE
-function removeItem(i){
-cart.splice(i,1);
-localStorage.klyro=JSON.stringify(cart);
-displayCart();
-}
+  cart = JSON.parse(localStorage.klyro || "[]");
+  if (!cart.length) return alert("Cart empty");
 
-// THEME
-theme-switch?.onclick=e=>{
-e.preventDefault();
-document.body.classList.toggle("light");
-};
+  const orderID = "KLYRO-" + Math.floor(Math.random() * 99999);
 
-// CHECKOUT
-checkout-form?.addEventListener("submit",e=>{
-e.preventDefault();
+  let orders = [];
+  let total = 0;
 
-let order="";
-let total=0;
+  cart.forEach(item => {
+    orders.push({
+      name: item.name,
+      units: item.qty,
+      price: item.price * item.qty,
+      image_url: location.origin + "/" + item.img
+    });
+    total += item.price * item.qty;
+  });
 
-cart.forEach(i=>{
-order+=`${i.name} x${i.qty} = $${i.price*i.qty}\n`;
-total+=i.price*i.qty;
-});
+  const params = {
+    customer_email: form.customer_email.value,
+    customer_name: form.customer_name.value,
+    order_id: orderID,
+    orders: orders,
+    cost: { shipping: 0 },
+    total: total,
+    logo: location.origin + "/IMG_5093.png"
+  };
 
-let id="KLYRO-"+Math.floor(Math.random()*99999);
-
-emailjs.send("service_vyelgrs","template_aummpt5",{
-customer_name:e.target.customer_name.value,
-customer_email:e.target.customer_email.value,
-order_details:order,
-total:total,
-order_id:id
-});
-
-success.style.display="block";
-localStorage.clear();
+  emailjs.send("service_vyelgrs", "template_aummpt5", params)
+    .then(() => {
+      document.getElementById("success").style.display = "block";
+      localStorage.clear();
+    })
+    .catch(err => {
+      alert("Email failed");
+      console.log(err);
+    });
 });
