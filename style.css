@@ -1,42 +1,63 @@
-body{
+*{
 margin:0;
-background:black;
-color:white;
-text-align:center;
-font-family:Arial;
+box-sizing:border-box;
+font-family:system-ui;
 }
 
-header{
+body{
+background:#000;
+color:white;
+}
+
+.topbar{
 display:flex;
-flex-direction:column;
 align-items:center;
-background:#111;
-padding:10px;
+padding:15px;
+border-bottom:1px solid #222;
 }
 
 .logo{
-width:120px;
-margin-bottom:10px;
+width:36px;
+margin-right:10px;
 }
 
-nav a{
-color:white;
-margin:10px;
+.cart{
+margin-left:auto;
+font-size:22px;
 text-decoration:none;
 }
 
+.hero{
+padding:40px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-size:26px;
+}
+
+.hero p{
+opacity:.7;
+margin-top:10px;
+}
+
+.title{
+padding:0 20px;
+margin-bottom:10px;
+}
+
 .products{
-display:flex;
-justify-content:center;
-margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+padding:20px;
 }
 
 .product{
-background:white;
-color:black;
-padding:15px;
-border-radius:10px;
-width:220px;
+background:#111;
+padding:10px;
+border-radius:15px;
+text-align:center;
 }
 
 .product img{
@@ -44,69 +65,17 @@ width:100%;
 border-radius:10px;
 }
 
-button{
-padding:10px;
-margin-top:10px;
-width:100%;
-cursor:pointer;
-}
-
-.checkout-btn{
+.product button{
 background:red;
+border:none;
 color:white;
-padding:15px;
-display:block;
-margin:20px auto;
-width:200px;
-text-decoration:none;
-}
-
-.row{
-display:flex;
-align-items:center;
-gap:10px;
-margin:10px;
-}
-
-.row img{
-width:40px;
-}
-
-input{
 padding:10px;
-margin:5px;
-width:80%;
-}
-
-#success{
-display:none;
-font-size:24px;
-color:lime;
-margin-top:20px;
-}
-
-#loading{
-position:fixed;
-top:0;
-left:0;
 width:100%;
-height:100%;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
+border-radius:10px;
+margin-top:8px;
 }
 
-.spinner{
-width:40px;
-height:40px;
-border:5px solid #333;
-border-top:5px solid red;
-border-radius:50%;
-animation:spin 1s linear infinite;
+.product:hover{
+transform:scale(1.03);
+transition:.2s;
 }
-
-@keyframes spin{
-to{transform:rotate(360deg)}
-}
-
