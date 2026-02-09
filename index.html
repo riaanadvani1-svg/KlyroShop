@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Checkout - KlyroShop</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width">
 
-<!-- EmailJS SDK -->
-<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
-<script>
-  // YOUR PUBLIC KEY FROM EMAILJS
-  emailjs.init("U_nim9l3BnK09_adT");
-</script>
+<title>Klyro</title>
+
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div id="loading"><div class="spinner"></div></div>
+<header class="topbar">
+<img src="IMG_5093.png" class="logo">
+<span>KLYRO</span>
 
-<header>
-  <img src="IMG_5093.png" class="logo">
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="checkout.html">Checkout</a>
-    <a href="#" id="theme-switch">Theme</a>
-  </nav>
+<a href="checkout.html" class="cart">🛒</a>
 </header>
 
-<form id="checkout-form">
-  <input name="customer_name" placeholder="Your Name" required>
-  <input name="customer_email" placeholder="Your Email" required>
+<section class="hero">
+<h1>If you want to quit,<br>remember why you started.</h1>
+<p>Premium profile pictures</p>
+</section>
 
-  <div id="cart-items"></div>
+<h2 class="title">Featured</h2>
 
-  <h3>Total: $<span id="total-price">0</span></h3>
+<div class="products">
 
-  <button class="checkout-btn">Place Order</button>
-</form>
+<div class="product">
+<img src="28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg">
+<h3>Neymar PFP</h3>
+<p>$3</p>
 
-<div id="success" style="display:none">✅ Order Sent!</div>
+<button onclick="addToCart('Neymar PFP',3,'28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg')">
+Add to Cart
+</button>
+
+</div>
+
+</div>
 
 <script src="main.js"></script>
-<script>displayCart();</script>
 
 </body>
 </html>
