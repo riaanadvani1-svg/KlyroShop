@@ -1,36 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>KlyroShop</title>
+<title>Checkout - KlyroShop</title>
 <link rel="stylesheet" href="style.css">
-</head>
 
+<!-- EmailJS SDK -->
+<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+<script>
+  // YOUR PUBLIC KEY FROM EMAILJS
+  emailjs.init("U_nim9l3BnK09_adT");
+</script>
+</head>
 <body>
 
 <div id="loading"><div class="spinner"></div></div>
 
 <header>
-<img src="IMG_5093.png" class="logo">
-
-<nav>
-<a href="index.html">Home</a>
-<a href="checkout.html">Checkout</a>
-<a href="#" id="theme-switch">Theme</a>
-</nav>
+  <img src="IMG_5093.png" class="logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="#" id="theme-switch">Theme</a>
+  </nav>
 </header>
 
-<div class="products">
-  <div class="product">
-    <img src="28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg">
-    <h3>Neymar PFP</h3>
-    <p>$25</p>
-    <button onclick="addToCart('Neymar PFP',25,'28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg')">Add to Cart</button>
-  </div>
-</div>
+<form id="checkout-form">
+  <input name="customer_name" placeholder="Your Name" required>
+  <input name="customer_email" placeholder="Your Email" required>
 
-<a class="checkout-btn" href="checkout.html">Go Checkout</a>
+  <div id="cart-items"></div>
+
+  <h3>Total: $<span id="total-price">0</span></h3>
+
+  <button class="checkout-btn">Place Order</button>
+</form>
+
+<div id="success" style="display:none">✅ Order Sent!</div>
 
 <script src="main.js"></script>
+<script>displayCart();</script>
+
 </body>
 </html>
