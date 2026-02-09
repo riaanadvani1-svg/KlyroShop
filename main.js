@@ -112,9 +112,12 @@ form?.addEventListener("submit", e => {
     logo: location.origin + "/IMG_5093.png"
   };
 
+  console.log("Sending email with params:", params);
+
   emailjs.send("service_vyelgrs", "template_aummpt5", params)
     .then(() => {
-      document.getElementById("success").style.display = "block";
+      const successDiv = document.getElementById("success");
+      if(successDiv) successDiv.style.display = "block";
       localStorage.clear();
     })
     .catch(err => {
@@ -122,3 +125,6 @@ form?.addEventListener("submit", e => {
       console.log(err);
     });
 });
+
+// ================= INITIALIZE =================
+displayCart();
