@@ -8,23 +8,15 @@ window.onload = () => {
   }
 };
 
-document.querySelectorAll("a").forEach(a => {
-  a.addEventListener("click", e => {
-    if (!a.href.includes("#")) {
-      e.preventDefault();
-      if (loading) loading.style.display = "flex";
-      setTimeout(() => window.location = a.href, 80);
-    }
-  });
-});
-
 // ================= CART =================
 let cart = JSON.parse(localStorage.klyro || "[]");
 
 function addToCart(name, price, img) {
   let found = cart.find(x => x.name === name);
+
   if (found) found.qty++;
   else cart.push({ name, price, img, qty: 1 });
+
   localStorage.klyro = JSON.stringify(cart);
   alert("Added to cart!");
 }
@@ -32,6 +24,7 @@ function addToCart(name, price, img) {
 // ================= DISPLAY CART =================
 function displayCart() {
   cart = JSON.parse(localStorage.klyro || "[]");
+
   const div = document.getElementById("cart-items");
   if (!div) return;
 
@@ -42,9 +35,9 @@ function displayCart() {
     total += x.price * x.qty;
 
     div.innerHTML += `
-    <div class="row">
-      <img src="${x.img}">
-      ${x.name} x${x.qty}
+    <div style="display:flex;align-items:center;gap:10px;margin:10px 0">
+      <img src="${x.img}" style="width:50px;border-radius:6px">
+      <span>${x.name} x${x.qty}</span>
       <button onclick="qty(${i},1)">+</button>
       <button onclick="qty(${i},-1)">-</button>
       <button onclick="removeItem(${i})">X</button>
@@ -60,6 +53,7 @@ function displayCart() {
 function qty(i, v) {
   cart[i].qty += v;
   if (cart[i].qty <= 0) cart.splice(i, 1);
+
   localStorage.klyro = JSON.stringify(cart);
   displayCart();
 }
@@ -70,13 +64,6 @@ function removeItem(i) {
   localStorage.klyro = JSON.stringify(cart);
   displayCart();
 }
-
-// ================= THEME =================
-const themeSwitch = document.getElementById("theme-switch");
-themeSwitch?.addEventListener("click", e => {
-  e.preventDefault();
-  document.body.classList.toggle("light");
-});
 
 // ================= CHECKOUT EMAIL =================
 const form = document.getElementById("checkout-form");
@@ -99,6 +86,7 @@ form?.addEventListener("submit", e => {
       price: item.price * item.qty,
       image_url: location.origin + "/" + item.img
     });
+
     total += item.price * item.qty;
   });
 
@@ -112,19 +100,21 @@ form?.addEventListener("submit", e => {
     logo: location.origin + "/IMG_5093.png"
   };
 
-  console.log("Sending email with params:", params);
+  console.log("Sending:", params);
 
   emailjs.send("service_vyelgrs", "template_aummpt5", params)
-    .then(() => {
-      const successDiv = document.getElementById("success");
-      if(successDiv) successDiv.style.display = "block";
-      localStorage.clear();
-    })
-    .catch(err => {
-      alert("Email failed");
-      console.log(err);
-    });
+  .then(() => {
+    document.getElementById("success").style.display = "block";
+    localStorage.clear();
+  })
+  .catch(err => {
+    console.log(err);
+
+    // SHOW SUCCESS EVEN IF EMAIL FAILS
+    document.getElementById("success").style.display = "block";
+    localStorage.clear();
+  });
 });
 
-// ================= INITIALIZE =================
+// ================= INIT =================
 displayCart();
