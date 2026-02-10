@@ -1,120 +1,110 @@
-// ================= LOADER =================
-const loading = document.getElementById("loading");
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klyro Shop Checkout</title>
 
-window.onload = () => {
-  if (loading) {
-    loading.style.opacity = 0;
-    setTimeout(() => loading.style.display = "none", 200);
-  }
-};
-
-// ================= CART =================
-let cart = JSON.parse(localStorage.klyro || "[]");
-
-function addToCart(name, price, img) {
-  let found = cart.find(x => x.name === name);
-
-  if (found) found.qty++;
-  else cart.push({ name, price, img, qty: 1 });
-
-  localStorage.klyro = JSON.stringify(cart);
-  alert("Added to cart!");
+<!-- Styles -->
+<style>
+body{
+margin:0;
+font-family:system-ui;
+background:#000;
+color:white;
+text-align:center;
+padding:0;
 }
 
-// ================= DISPLAY CART =================
-function displayCart() {
-  cart = JSON.parse(localStorage.klyro || "[]");
-
-  const div = document.getElementById("cart-items");
-  if (!div) return;
-
-  div.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((x, i) => {
-    total += x.price * x.qty;
-
-    div.innerHTML += `
-    <div style="display:flex;align-items:center;gap:10px;margin:10px 0">
-      <img src="${x.img}" style="width:50px;border-radius:6px">
-      <span>${x.name} x${x.qty}</span>
-      <button onclick="qty(${i},1)">+</button>
-      <button onclick="qty(${i},-1)">-</button>
-      <button onclick="removeItem(${i})">X</button>
-    </div>
-    `;
-  });
-
-  const totalEl = document.getElementById("total-price");
-  if (totalEl) totalEl.innerText = total;
+header{
+display:flex;
+align-items:center;
+padding:15px;
+border-bottom:1px solid #222;
+background:#111;
 }
 
-// ================= QUANTITY =================
-function qty(i, v) {
-  cart[i].qty += v;
-  if (cart[i].qty <= 0) cart.splice(i, 1);
-
-  localStorage.klyro = JSON.stringify(cart);
-  displayCart();
+header img{
+height:40px;
+margin-right:10px;
 }
 
-// ================= REMOVE =================
-function removeItem(i) {
-  cart.splice(i, 1);
-  localStorage.klyro = JSON.stringify(cart);
-  displayCart();
+header span{
+font-size:20px;
+font-weight:bold;
 }
 
-// ================= CHECKOUT EMAIL =================
-const form = document.getElementById("checkout-form");
+main{
+padding:20px;
+max-width:400px;
+margin:auto;
+}
 
-form?.addEventListener("submit", e => {
-  e.preventDefault();
+#cart-items{
+text-align:left;
+margin-bottom:20px;
+}
 
-  cart = JSON.parse(localStorage.klyro || "[]");
-  if (!cart.length) return alert("Cart empty");
+#cart-items div{
+padding:10px;
+border-bottom:1px solid #333;
+}
 
-  const orderID = "KLYRO-" + Math.floor(Math.random() * 99999);
+#total{
+text-align:right;
+font-weight:bold;
+font-size:18px;
+margin-bottom:20px;
+}
 
-  let orders = [];
-  let total = 0;
+input,button{
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
 
-  cart.forEach(item => {
-    orders.push({
-      name: item.name,
-      units: item.qty,
-      price: item.price * item.qty,
-      image_url: location.origin + "/" + item.img
-    });
+button{
+background:#ff0000;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
 
-    total += item.price * item.qty;
-  });
+button:hover{
+opacity:0.9;
+}
 
-  const params = {
-    customer_email: form.customer_email.value,
-    customer_name: form.customer_name.value,
-    order_id: orderID,
-    orders: orders,
-    cost: { shipping: 0 },
-    total: total,
-    logo: location.origin + "/IMG_5093.png"
-  };
+</style>
 
-  console.log("Sending:", params);
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("U_nim9l3BnK09_adT"); // Your public key
+</script>
 
-  emailjs.send("service_vyelgrs", "template_aummpt5", params)
-  .then(() => {
-    document.getElementById("success").style.display = "block";
-    localStorage.clear();
-  })
-  .catch(err => {
-    console.log(err);
+</head>
+<body>
 
-    // SHOW SUCCESS EVEN IF EMAIL FAILS
-    document.getElementById("success").style.display = "block";
-    localStorage.clear();
-  });
-});
+<header>
+<img src="IMG_5093.png" alt="Logo">
+<span>Klyro Shop Checkout</span>
+</header>
 
-// ================= INIT =================
-displayCart();
+<main>
+
+<div id="cart-items"></div>
+<div id="total">Total: $<span id="total-price">0</span></div>
+
+<form id="checkout-form">
+<input type="text" name="customer_name" placeholder="Your Name" required>
+<input type="email" name="customer_email" placeholder="Your Email" required>
+<button type="submit">Place Order</button>
+</form>
+
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
