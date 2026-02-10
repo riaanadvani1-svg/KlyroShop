@@ -1,110 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Klyro Shop Checkout</title>
+// CART LOGIC
+let cart = JSON.parse(localStorage.klyro || "[]");
 
-<!-- Styles -->
-<style>
-body{
-margin:0;
-font-family:system-ui;
-background:#000;
-color:white;
-text-align:center;
-padding:0;
+function addToCart(){
+    let sizeSelect = event.target.parentElement.querySelector("select");
+    let size = sizeSelect ? sizeSelect.value : "M";
+
+    let productName = event.target.parentElement.querySelector("h2").innerText;
+
+    cart.push({
+        name: productName,
+        size:size,
+        price:9
+    });
+
+    localStorage.klyro = JSON.stringify(cart);
+    renderCart();
+    alert("Added to cart!");
 }
 
-header{
-display:flex;
-align-items:center;
-padding:15px;
-border-bottom:1px solid #222;
-background:#111;
+// DISPLAY CART
+function renderCart(){
+    let div = document.getElementById("cart");
+    if(!div) return;
+
+    div.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item,index)=>{
+        total += item.price;
+        div.innerHTML += `<div>${item.name} | Size ${item.size} — $${item.price}</div>`;
+    });
+
+    div.innerHTML += `<strong>Total: $${total}</strong>`;
 }
 
-header img{
-height:40px;
-margin-right:10px;
+// INITIAL RENDER
+renderCart();
+
+// ======= 3D VIEW TOGGLE =======
+function toggle3D(card){
+    let iframe = card.querySelector("iframe");
+    if(!iframe) return;
+
+    if(iframe.style.display === "none"){
+        iframe.style.display = "block";
+        card.querySelector("button:last-of-type").innerText = "Hide 3D";
+    } else {
+        iframe.style.display = "none";
+        card.querySelector("button:last-of-type").innerText = "View 3D";
+    }
 }
-
-header span{
-font-size:20px;
-font-weight:bold;
-}
-
-main{
-padding:20px;
-max-width:400px;
-margin:auto;
-}
-
-#cart-items{
-text-align:left;
-margin-bottom:20px;
-}
-
-#cart-items div{
-padding:10px;
-border-bottom:1px solid #333;
-}
-
-#total{
-text-align:right;
-font-weight:bold;
-font-size:18px;
-margin-bottom:20px;
-}
-
-input,button{
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-border:none;
-font-size:16px;
-}
-
-button{
-background:#ff0000;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-</style>
-
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-emailjs.init("U_nim9l3BnK09_adT"); // Your public key
-</script>
-
-</head>
-<body>
-
-<header>
-<img src="IMG_5093.png" alt="Logo">
-<span>Klyro Shop Checkout</span>
-</header>
-
-<main>
-
-<div id="cart-items"></div>
-<div id="total">Total: $<span id="total-price">0</span></div>
-
-<form id="checkout-form">
-<input type="text" name="customer_name" placeholder="Your Name" required>
-<input type="email" name="customer_email" placeholder="Your Email" required>
-<button type="submit">Place Order</button>
-</form>
-
-</main>
-
-<script src="main.js"></script>
-</body>
-</html>
