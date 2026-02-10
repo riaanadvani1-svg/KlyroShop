@@ -1,42 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+
+<title>Klyro Shop</title>
 <meta name="viewport" content="width=device-width">
 
-<title>Klyro</title>
+<style>
 
-<link rel="stylesheet" href="style.css">
+body{
+margin:0;
+font-family:system-ui;
+background:#000;
+color:white;
+}
+
+header{
+padding:15px;
+font-size:20px;
+font-weight:bold;
+text-align:center;
+border-bottom:1px solid #222;
+}
+
+.product{
+max-width:400px;
+margin:auto;
+padding:15px;
+}
+
+img{
+width:100%;
+border-radius:10px;
+}
+
+iframe{
+width:100%;
+height:300px;
+border-radius:10px;
+border:none;
+margin-top:10px;
+}
+
+select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+background:#ff0000;
+color:white;
+font-weight:bold;
+}
+
+.cart{
+padding:15px;
+border-top:1px solid #222;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<header class="topbar">
-<img src="IMG_5093.png" class="logo">
-<span>KLYRO</span>
-
-<a href="checkout.html" class="cart">🛒</a>
-</header>
-
-<section class="hero">
-<h1>If you want to quit,<br>remember why you started.</h1>
-<p>Premium profile pictures</p>
-</section>
-
-<h2 class="title">Featured</h2>
-
-<div class="products">
+<header>KLYRO</header>
 
 <div class="product">
-<img src="28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg">
-<h3>Neymar PFP</h3>
-<p>$3</p>
 
-<button onclick="addToCart('Neymar PFP',3,'28420d17-655e-4b22-bf4d-e25739f93a8a.jpeg')">
-Add to Cart
-</button>
+<img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png">
+
+<h2>Black Flame Hoodie</h2>
+
+<p>$9</p>
+
+<select id="size">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button onclick="addToCart()">Add To Cart</button>
+
+<iframe src="https://sketchfab.com/models/0fd0effa321e456cb2a7467e2899b658/embed"></iframe>
 
 </div>
+
+<div class="cart">
+
+<h3>Cart</h3>
+<div id="cart"></div>
+
+<button onclick="checkout()">Checkout</button>
 
 </div>
 
