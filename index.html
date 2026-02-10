@@ -42,6 +42,7 @@ padding:15px;
 border-radius:10px;
 margin-bottom:20px;
 transition:transform 0.2s;
+cursor:pointer;
 }
 
 .product-card:hover{
@@ -59,9 +60,10 @@ height:300px;
 border:none;
 border-radius:10px;
 margin-top:10px;
+display:none; /* hidden until clicked */
 }
 
-select,button{
+button, select{
 width:100%;
 padding:12px;
 margin-top:10px;
@@ -97,12 +99,10 @@ border-top:1px solid #222;
 
 <main>
 
-<div class="product-card">
-
+<div class="product-card" onclick="toggle3D(this)">
 <img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png" alt="Black Flame Hoodie">
-
 <h2>Black Flame Hoodie</h2>
-<p>$15</p>
+<p>$9</p>
 
 <select id="size">
 <option>S</option>
@@ -111,9 +111,11 @@ border-top:1px solid #222;
 <option>XL</option>
 </select>
 
-<button onclick="addToCart()">Add To Cart</button>
+<button onclick="addToCart(); event.stopPropagation();">Add To Cart</button>
 
 <iframe src="https://sketchfab.com/models/0fd0effa321e456cb2a7467e2899b658/embed" title="Black Flame Hoodie"></iframe>
+
+<button onclick="toggle3D(this.parentElement)">View 3D</button>
 
 </div>
 
