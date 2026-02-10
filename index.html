@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Klyro Shop</title>
-<meta name="viewport" content="width=device-width">
 
 <style>
-
 body{
 margin:0;
 font-family:system-ui;
@@ -15,20 +13,42 @@ color:white;
 }
 
 header{
+display:flex;
+align-items:center;
 padding:15px;
+border-bottom:1px solid #222;
+background:#111;
+}
+
+header img{
+height:40px;
+margin-right:10px;
+}
+
+header span{
 font-size:20px;
 font-weight:bold;
-text-align:center;
-border-bottom:1px solid #222;
 }
 
-.product{
-max-width:400px;
+main{
+padding:20px;
+max-width:500px;
 margin:auto;
-padding:15px;
 }
 
-img{
+.product-card{
+background:#111;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+transition:transform 0.2s;
+}
+
+.product-card:hover{
+transform:scale(1.03);
+}
+
+.product-card img{
 width:100%;
 border-radius:10px;
 }
@@ -36,8 +56,8 @@ border-radius:10px;
 iframe{
 width:100%;
 height:300px;
-border-radius:10px;
 border:none;
+border-radius:10px;
 margin-top:10px;
 }
 
@@ -54,27 +74,34 @@ button{
 background:#ff0000;
 color:white;
 font-weight:bold;
+cursor:pointer;
 }
 
-.cart{
+button:hover{
+opacity:0.9;
+}
+
+#cart-summary{
 padding:15px;
 border-top:1px solid #222;
 }
-
 </style>
 
 </head>
-
 <body>
 
-<header>KLYRO</header>
+<header>
+<img src="IMG_5093.png" alt="Logo">
+<span>Klyro Shop</span>
+</header>
 
-<div class="product">
+<main>
 
-<img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png">
+<div class="product-card">
+
+<img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png" alt="Black Flame Hoodie">
 
 <h2>Black Flame Hoodie</h2>
-
 <p>$9</p>
 
 <select id="size">
@@ -86,20 +113,17 @@ border-top:1px solid #222;
 
 <button onclick="addToCart()">Add To Cart</button>
 
-<iframe src="https://sketchfab.com/models/0fd0effa321e456cb2a7467e2899b658/embed"></iframe>
+<iframe src="https://sketchfab.com/models/0fd0effa321e456cb2a7467e2899b658/embed" title="Black Flame Hoodie"></iframe>
 
 </div>
 
-<div class="cart">
-
+<div id="cart-summary">
 <h3>Cart</h3>
 <div id="cart"></div>
-
-<button onclick="checkout()">Checkout</button>
-
 </div>
 
 <script src="main.js"></script>
 
+</main>
 </body>
 </html>
