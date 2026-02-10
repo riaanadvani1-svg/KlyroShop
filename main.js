@@ -50,3 +50,8 @@ function toggle3D(card){
         card.querySelector("button:last-of-type").innerText = "View 3D";
     }
 }
+
+// ======= THEME SWITCH =======
+function toggleTheme(){
+    document.body.classList.toggle("light");
+}
