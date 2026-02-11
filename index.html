@@ -1,157 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Klyro Shop</title>
+<meta charset="UTF-8">
+<title>Klyro</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
-/* DEFAULT THEME VARIABLES */
-:root{
-  --bg-color:#000;
-  --text-color:#fff;
-  --card-bg:#111;
-  --btn-bg:#ff0000;
-}
-
-/* LIGHT THEME VARIABLES */
-body.light{
-  --bg-color:#fff;
-  --text-color:#000;
-  --card-bg:#f5f5f5;
-  --btn-bg:#ff2b2b;
-}
-
-body{
-margin:0;
-font-family:system-ui;
-background:var(--bg-color);
-color:var(--text-color);
-transition: all 0.3s ease;
-}
-
-header{
-display:flex;
-align-items:center;
-padding:15px;
-border-bottom:1px solid #222;
-background:var(--card-bg);
-}
-
-header img{
-height:40px;
-margin-right:10px;
-}
-
-header span{
-font-size:20px;
-font-weight:bold;
-flex-grow:1;
-}
-
-header button{
-padding:8px 12px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#888;
-color:white;
-font-weight:bold;
-}
-
-main{
-padding:20px;
-max-width:500px;
-margin:auto;
-}
-
-.product-card{
-background:var(--card-bg);
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-transition:transform 0.2s;
-cursor:pointer;
-}
-
-.product-card:hover{
-transform:scale(1.03);
-}
-
-.product-card img{
-width:100%;
-border-radius:10px;
-}
-
-iframe{
-width:100%;
-height:300px;
-border:none;
-border-radius:10px;
-margin-top:10px;
-display:none; /* hidden until clicked */
-}
-
-select,button.add-to-cart{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-font-size:16px;
-background:var(--btn-bg);
-color:white;
-cursor:pointer;
-}
-
-button.add-to-cart:hover{
-opacity:0.9;
-}
-
-#cart-summary{
-padding:15px;
-border-top:1px solid #222;
-}
-
+body{margin:0;font-family:system-ui;background:#fff;color:#000}
+header{display:flex;align-items:center;padding:12px;border-bottom:1px solid #ddd}
+header img{height:30px;margin-right:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;padding:20px}
+.card{border:1px solid #ddd;padding:10px;border-radius:10px}
+.card img{width:100%}
+button{width:100%;padding:10px;margin-top:8px}
+select{width:100%;margin-top:5px;padding:6px}
+.price{font-weight:bold;margin:5px 0}
 </style>
-
 </head>
+
 <body>
 
 <header>
-<img src="IMG_5093.png" alt="Logo">
-<span>Klyro Shop</span>
-<button onclick="toggleTheme()">Switch Theme</button>
+<img src="IMG_5093.png">
+<b>KLYRO</b>
+<a href="checkout.html" style="margin-left:auto">Cart</a>
 </header>
 
-<main>
+<div class="grid">
 
-<div class="product-card" onclick="toggle3D(this)">
-<img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png" alt="Black Flame Hoodie">
-<h2>Black Flame Hoodie</h2>
-<p>$9</p>
+<!-- PRODUCT 1 -->
+<div class="card">
+<img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png">
 
-<select id="size">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
+<h3>Black Flame Hoodie</h3>
+<div class="price">$15</div>
+
+<select id="size1">
+<option>S</option><option>M</option><option>L</option><option>XL</option>
 </select>
 
-<button class="add-to-cart" onclick="addToCart(); event.stopPropagation();">Add To Cart</button>
+<select id="color1">
+<option>Black</option><option>White</option>
+</select>
 
-<iframe src="https://sketchfab.com/models/0fd0effa321e456cb2a7467e2899b658/embed" title="Black Flame Hoodie"></iframe>
-
-<button onclick="toggle3D(this.parentElement)">View 3D</button>
-
+<button onclick="add(1)">Add To Cart</button>
 </div>
 
-<div id="cart-summary">
-<h3>Cart</h3>
-<div id="cart"></div>
+<!-- PRODUCT 2 -->
+<div class="card">
+<img src="Screenshot_2026-02-11_at_10.39.59_AM-removebg-preview.png">
+
+<h3>I Love Pizza Hoodie 🍕</h3>
+<div class="price">$15</div>
+
+<select id="size2">
+<option>S</option><option>M</option><option>L</option><option>XL</option>
+</select>
+
+<select id="color2">
+<option>Black</option><option>White</option>
+</select>
+
+<button onclick="add(2)">Add To Cart</button>
+</div>
+
 </div>
 
 <script src="main.js"></script>
-
-</main>
 </body>
 </html>
