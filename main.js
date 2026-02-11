@@ -1,57 +1,47 @@
-// CART LOGIC
 let cart = JSON.parse(localStorage.klyro || "[]");
 
-function addToCart(){
-    let sizeSelect = event.target.parentElement.querySelector("select");
-    let size = sizeSelect ? sizeSelect.value : "M";
+function add(id){
 
-    let productName = event.target.parentElement.querySelector("h2").innerText;
+let product = {};
 
-    cart.push({
-        name: productName,
-        size:size,
-        price:9
-    });
-
-    localStorage.klyro = JSON.stringify(cart);
-    renderCart();
-    alert("Added to cart!");
+if(id===1){
+product={
+name:"Black Flame Hoodie",
+price:15,
+size:document.getElementById("size1").value,
+color:document.getElementById("color1").value
+};
 }
 
-// DISPLAY CART
-function renderCart(){
-    let div = document.getElementById("cart");
-    if(!div) return;
-
-    div.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item,index)=>{
-        total += item.price;
-        div.innerHTML += `<div>${item.name} | Size ${item.size} — $${item.price}</div>`;
-    });
-
-    div.innerHTML += `<strong>Total: $${total}</strong>`;
+if(id===2){
+product={
+name:"I Love Pizza Hoodie",
+price:15,
+size:document.getElementById("size2").value,
+color:document.getElementById("color2").value
+};
 }
 
-// INITIAL RENDER
-renderCart();
+cart.push(product);
 
-// ======= 3D VIEW TOGGLE =======
-function toggle3D(card){
-    let iframe = card.querySelector("iframe");
-    if(!iframe) return;
-
-    if(iframe.style.display === "none"){
-        iframe.style.display = "block";
-        card.querySelector("button:last-of-type").innerText = "Hide 3D";
-    } else {
-        iframe.style.display = "none";
-        card.querySelector("button:last-of-type").innerText = "View 3D";
-    }
+localStorage.klyro = JSON.stringify(cart);
+alert("Added to cart!");
 }
 
-// ======= THEME SWITCH =======
-function toggleTheme(){
-    document.body.classList.toggle("light");
+// CHECKOUT PAGE
+if(document.getElementById("cart")){
+let total=0;
+cart.forEach(x=>{
+total+=x.price;
+document.getElementById("cart").innerHTML+=`
+<div style="padding:8px;border-bottom:1px solid #333">
+${x.name} | ${x.size} | ${x.color} — $${x.price}
+</div>`;
+});
+document.getElementById("total").innerText=total;
+}
+
+// STRIPE PAYMENT
+function pay(){
+location.href="https://buy.stripe.com/test_00wdR972M3gt4NF2vQ5Vu00";
 }
