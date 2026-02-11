@@ -6,15 +6,84 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
-body{margin:0;font-family:system-ui;background:#fff;color:#000}
-header{display:flex;align-items:center;padding:12px;border-bottom:1px solid #ddd}
-header img{height:30px;margin-right:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;padding:20px}
-.card{border:1px solid #ddd;padding:10px;border-radius:10px}
-.card img{width:100%}
-button{width:100%;padding:10px;margin-top:8px}
-select{width:100%;margin-top:5px;padding:6px}
-.price{font-weight:bold;margin:5px 0}
+body{
+margin:0;
+font-family:Inter,system-ui;
+background:#fafafa;
+}
+
+header{
+display:flex;
+align-items:center;
+padding:16px 20px;
+background:white;
+position:sticky;
+top:0;
+border-bottom:1px solid #eee;
+}
+
+header img{height:28px;margin-right:10px}
+
+.grid{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+max-width:1100px;
+margin:auto;
+}
+
+.card{
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 8px 25px #0001;
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card img{
+width:100%;
+height:260px;
+object-fit:contain;
+background:#f4f4f4;
+}
+
+.info{
+padding:15px;
+}
+
+h3{margin:5px 0}
+
+.price{font-weight:600}
+
+select{
+width:100%;
+margin-top:8px;
+padding:8px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+button{
+width:100%;
+margin-top:12px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:black;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+.cart{
+margin-left:auto;
+font-weight:500;
+}
 </style>
 </head>
 
@@ -23,17 +92,16 @@ select{width:100%;margin-top:5px;padding:6px}
 <header>
 <img src="IMG_5093.png">
 <b>KLYRO</b>
-<a href="checkout.html" style="margin-left:auto">Cart</a>
+<a class="cart" href="checkout.html">Cart</a>
 </header>
 
 <div class="grid">
 
-<!-- PRODUCT 1 -->
 <div class="card">
 <img src="Screenshot_2026-02-10_at_10.47.22_AM_1-removebg-preview.png">
-
+<div class="info">
 <h3>Black Flame Hoodie</h3>
-<div class="price">$15</div>
+<div class="price">$9</div>
 
 <select id="size1">
 <option>S</option><option>M</option><option>L</option><option>XL</option>
@@ -43,15 +111,15 @@ select{width:100%;margin-top:5px;padding:6px}
 <option>Black</option><option>White</option>
 </select>
 
-<button onclick="add(1)">Add To Cart</button>
+<button onclick="add(1)">Add to cart</button>
+</div>
 </div>
 
-<!-- PRODUCT 2 -->
 <div class="card">
 <img src="Screenshot_2026-02-11_at_10.39.59_AM-removebg-preview.png">
-
+<div class="info">
 <h3>I Love Pizza Hoodie 🍕</h3>
-<div class="price">$15</div>
+<div class="price">$9</div>
 
 <select id="size2">
 <option>S</option><option>M</option><option>L</option><option>XL</option>
@@ -61,7 +129,8 @@ select{width:100%;margin-top:5px;padding:6px}
 <option>Black</option><option>White</option>
 </select>
 
-<button onclick="add(2)">Add To Cart</button>
+<button onclick="add(2)">Add to cart</button>
+</div>
 </div>
 
 </div>
